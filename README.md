@@ -1,6 +1,45 @@
 # GEMINI.md
 Archivo de convenciones Lidertech para usar dentro del editor firebase studio en proyectos Angular de Lidertech.
 
+# ENUM DE ESTADOS PARA SERVICIOS Y COMPONENTES:
+
+
+  El diccionario de estados universal para todas las divisiones de Lidertech se llamará estrictamente StateEnum (singular, sin 's').
+  Alcance: Este enum es inmutable y debe ser la única fuente de vocabulario para describir el estado operacional, de conectividad y de flujo de cualquier componente o servicio en todas las aplicaciones de Lidertech durante los próximos 30 años.
+  Convención de Nombres: Las claves dentro del enum deben estar en MAYÚSCULAS y sus valores asociados en minúsculas (ej. CARGANDO = 'cargando').
+  Ubicación: El archivo debe residir en un directorio central de utilidades, llamado preferiblemente states/state.enum.ts o similar.
+
+  Contenido del Enum de estados único y universal.
+
+    export enum StateEnum {
+      // --- Ciclo de Vida General ---
+      INICIAL = 'inicial',      
+      CARGANDO = 'cargando',    
+      PAGINANDO = 'paginando',  
+      PROCESANDO = 'procesando',
+      PENDIENTE_RED = 'pendiente_red', // Para sistemas asíncronos y Blockchain (LiderFinance).
+      
+      // --- Resultados ---
+      EXITO = 'exito', ERROR = 'error', TIMEOUT = 'timeout',      
+  
+      // --- Contenido ---
+      VACIO = 'vacio',          
+      SIN_RESULTADOS = 'sin_resultados', 
+      
+      // --- Interacción / Autorización ---
+      DESHABILITADO = 'deshabilitado', AUTENTICANDO = 'autenticando',AUTORIZADO = 'autorizado',  NO_AUTORIZADO = 'no_autorizado',
+  
+      // --- Conectividad / Hardware ---
+      EN_LINEA = 'en_linea',    FUERA_LINEA = 'fuera_linea', CONECTADO = 'conectado',  DESCONECTADO = 'desconectado',MONITOREANDO = 'monitoreando',FALLO_SENSOR = 'fallo_sensor',
+      CALIBRANDO = 'calibrando',// Para setup de hardware o sistemas (LiderAuto, LiderAutomate).
+  
+      // --- Flujo / Multimedia ---
+      REPRODUCIENDO = 'reproduciendo', PAUSADO = 'pausado', LISTO = 'listo',   TERMINADO = 'terminado',  
+  }
+
+
+
+
 # ESTADOS GLOBALES DE LA APLICACIÓN:
 
   El servicio de estado global se llamará exclusivamente GlobalState. Su alcance es estrictamente limitado a gestionar la Identidad, la Sesión y la Disponibilidad de la aplicación (ej., rolDeUsuario, sesionActiva). 
