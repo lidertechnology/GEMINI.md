@@ -1,6 +1,25 @@
 # GEMINI.md
 Archivo de convenciones Lidertech para usar dentro del editor firebase studio en proyectos Angular de Lidertech.
 
+# MANEJO DE ESTADOS MUTABILIDAD UNICA Y SEGREGACIÓN DE LA MUTABILIDAD DE ESTADOS.
+
+
+Esta es la regla más importante para garantizar la arquitectura inmutable y prevenir colisiones de estado en todas las aplicaciones Lidertech.
+
+La mutación (escritura) de cualquier estado es una responsabilidad exclusiva del servicio que lo gestiona:
+
+Estados Globales de Identidad: El servicio GlobalState es el único punto donde se permite mutar el estado de la sesión o el rol de usuario (ej., llamar a establecerSesionActiva(true)).
+
+Estados Operacionales: Cada Servicio Operacional (ej., ReadService, WriteService) es el único responsable de mutar su propio estado de flujo de trabajo tipificado con StateEnum (ej., llamar a this.estado.set(StateEnum.CARGANDO)).
+
+## Regla de Oro:
+
+Ningún componente, ni ningún otro servicio, puede mutar el estado de un servicio ajeno.
+
+* Los componentes y los Servicios de Utilidad (Stateless) solo tienen permiso de acceso de solo lectura a los signals públicos de cualquier servicio.
+  Esto garantiza que una acción en un componente no cause efectos secundarios inesperados o colisiones de estado en otra parte de la aplicación.
+
+
 # ENUM DE ESTADOS PARA SERVICIOS Y COMPONENTES:
 
 
