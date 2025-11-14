@@ -78,3 +78,27 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
     
         // En la plantilla (template):
         // @if (stateEnum() === StateEnum.CARGANDO) { ... }
+
+
+
+# SERVICOOS DE APLICACIONES LIDERTECH Y PITOS Y USOS:
+
+  En la arquitectura Lidertech, los servicios se dividen en dos categorías basadas en su gestión de estado, para asegurar el Principio de Responsabilidad Única:
+
+* Servicios Operacionales con Estado Interno: Responsables de ejecutar flujos de trabajo asíncronos (lectura, escritura, transacciones). Deben gestionar su propio ciclo de vida utilizando un signal tipificado con StateEnum (ej. ReadService, WriteService).
+
+* Servicios de Utilidad (Stateless): Responsables de funcionalidades puntuales, enfocadas y sin estado persistente. No gestionan el StateEnum ya que su ejecución es directa (ej. AutorizadorService, CodificadorService).
+
+
+
+
+# Uso de StateEnum por Tipo de Servicio:
+
+  El uso del diccionario de estado StateEnum está estrictamente delimitado por la función del servicio:
+
+  * Servicios Operacionales con Estado Interno: Siempre deben usar el StateEnum para gestionar y exponer su ciclo de vida (ej., CARGANDO, PROCESANDO, EXITO).
+
+  * Servicios de Utilidad (Stateless): Nunca deben usar el StateEnum. Estos servicios son herramientas funcionales cuya ejecución es inmediata y directa.
+    El estado de la operación (si una funcionalidad falla o no) es responsabilidad del componente o del Servicio Operacional que invoca a la utilidad.
+
+  
