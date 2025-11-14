@@ -42,8 +42,8 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
       EXITO = 'exito', ERROR = 'error', TIMEOUT = 'timeout',      
   
       // --- Contenido ---
-      VACIO = 'vacio',          
-      SIN_RESULTADOS = 'sin_resultados', 
+      SIN_RESULTADOS = 'sin_resultados', // La consulta se ejecutó con éxito pero no arrojó resultados.
+      VACIO = 'vacio', // El estado representa intencionadamente un conjunto de datos vacío (ej. una lista vaciada por el usuario), no es un resultado de una búsqueda.
       
       // --- Interacción / Autorización ---
       DESHABILITADO = 'deshabilitado', AUTENTICANDO = 'autenticando',AUTORIZADO = 'autorizado',  NO_AUTORIZADO = 'no_autorizado',
@@ -65,7 +65,10 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
   El servicio de estado global se llamará exclusivamente GlobalState. Su alcance es estrictamente limitado a gestionar la Identidad, la Sesión y la Disponibilidad de la aplicación (ej., rolDeUsuario, sesionActiva). 
   Se prohíbe que este servicio almacene o gestione estados operacionales genéricos (como CARGANDO, PAGINANDO, PROCESANDO), los cuales deben ser manejados por los servicios o componentes locales correspondientes. 
-  Para garantizar la inmutabilidad y el control de la escritura (QI 1000%), el estado interno se almacena en WritableSignal privados y se expone públicamente solo a través de propiedades de Signal<T> de solo lectura, asegurando que los cambios solo puedan realizarse a través de los métodos definidos dentro del GlobalState. Los datos deben estar siempre fuertemente tipados, utilizando el enum RolUsuario para la información de permisos.
+  
+  Para garantizar la inmutabilidad (QI 1000%), el estado interno se almacena en WritableSignal privados y se expone públicamente solo a través de propiedades de Signal<T> de solo lectura. 
+  
+  **Nota sobre Nomenclatura:** A diferencia de los servicios operacionales, los signals de GlobalState usan nombres descriptivos (ej. `sesionActiva`) en lugar del genérico `stateEnumGlobal`, porque cada signal gestiona una pieza de estado única y fuertemente tipada (`boolean`, `RolUsuario`), no el `StateEnum` general. El patrón de seguridad `private _variable` / `public variable` es idéntico.
 
       import { Injectable, signal, Signal, WritableSignal } from '@angular/core';
       import { RolUsuario } from 'src/app/interfaces/perfil-interface'; 
@@ -143,7 +146,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 ---
 
-# Convención Universal: El Patrón de Signal de Estado Dual SOLO PARA SERVICIOS OPERACIONALES.
+# Convención Universal: El Patrón de Signal de Estado Dual
 
 Para garantizar la seguridad, inmutabilidad y claridad en la gestión del estado de los **Servicios Operacionales** (aquellos que realizan tareas asíncronas como leer o escribir datos), implementaremos obligatoriamente el **Patrón de Signal de Estado Dual**.
 
@@ -158,23 +161,23 @@ Este patrón se basa en la separación de responsabilidades de escritura y lectu
 
 Este es el `signal` que el servicio utiliza para gestionar **su propio estado interno**.
 
-    *   **Propósito:** Es la única variable que el servicio puede **modificar**. Se usa dentro de los métodos del servicio (`obtenerDocumentos`, `crearUsuario`, etc.) para actualizar el ciclo de vida de la operación (`CARGANDO`, `EXITO`, `ERROR`).
-    *   **Visibilidad:** `private readonly`.
+*   **Propósito:** Es la única variable que el servicio puede **modificar**. Se usa dentro de los métodos del servicio (`obtenerDocumentos`, `crearUsuario`, etc.) para actualizar el ciclo de vida de la operación (`CARGANDO`, `EXITO`, `ERROR`).
+*   **Visibilidad:** `private readonly`.
     *   `private`: Asegura que ningún componente o servicio externo pueda acceder a él. Es de uso exclusivo de la clase.
     *   `readonly`: Previene que la referencia al `signal` en sí misma sea reasignada.
-    *   **Tipo:** `WritableSignal<StateEnum>`. Necesita ser mutable para poder usar `.set()` y `.update()`.
-    *   **Nomenclatura:** `_` + `[Nombre del Signal Público]`. El guion bajo `_` es una convención universal para indicar que es una propiedad privada.
+*   **Tipo:** `WritableSignal<StateEnum>`. Necesita ser mutable para poder usar `.set()` y `.update()`.
+*   **Nomenclatura:** `_` + `[Nombre del Signal Público]`. El guion bajo `_` es una convención universal para indicar que es una propiedad privada.
     *   **Ejemplo:** `private readonly _stateEnumRead = signal<StateEnum>(StateEnum.INICIAL);`
 
 ### 2. El Signal Público: `stateEnum[NombreDelServicio]`
 
 Este es el `signal` que el servicio expone al mundo exterior para que otros puedan **observar su estado** de forma segura.
 
-    *   **Propósito:** Es el "panel de control" que los componentes, directivas y otros servicios consumen para reaccionar a los cambios de estado (por ejemplo, para mostrar un spinner o un mensaje de error).
-    *   **Visibilidad:** `public readonly`.
+*   **Propósito:** Es el "panel de control" que los componentes, directivas y otros servicios consumen para reaccionar a los cambios de estado (por ejemplo, para mostrar un spinner o un mensaje de error).
+*   **Visibilidad:** `public readonly`.
     *   `public`: Para que cualquier consumidor pueda inyectar el servicio y leer su estado.
-    *   **Tipo:** `Signal<StateEnum>`. Se obtiene aplicando `.asReadonly()` al `signal` privado. Esto elimina los métodos `.set()` y `.update()`, haciéndolo **inmutable** desde el exterior.
-    *   **Nomenclatura:** `stateEnum` + `[Nombre del Servicio en PascalCase]`. Esta convención es clara, descriptiva y evita colisiones de nombres cuando un componente inyecta múltiples servicios.
+*   **Tipo:** `Signal<StateEnum>`. Se obtiene aplicando `.asReadonly()` al `signal` privado. Esto elimina los métodos `.set()` y `.update()`, haciéndolo **inmutable** desde el exterior.
+*   **Nomenclatura:** `stateEnum` + `[Nombre del Servicio en PascalCase]`. Esta convención es clara, descriptiva y evita colisiones de nombres cuando un componente inyecta múltiples servicios.
     *   **Ejemplo:** `public readonly stateEnumRead = this._stateEnumRead.asReadonly();`
 
 ---
