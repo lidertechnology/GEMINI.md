@@ -143,7 +143,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 ---
 
-# Convención Universal: El Patrón de Signal de Estado Dual
+# Convención Universal: El Patrón de Signal de Estado Dual SOLO PARA SERVICIOS OPERACIONALES.
 
 Para garantizar la seguridad, inmutabilidad y claridad en la gestión del estado de los **Servicios Operacionales** (aquellos que realizan tareas asíncronas como leer o escribir datos), implementaremos obligatoriamente el **Patrón de Signal de Estado Dual**.
 
@@ -158,23 +158,23 @@ Este patrón se basa en la separación de responsabilidades de escritura y lectu
 
 Este es el `signal` que el servicio utiliza para gestionar **su propio estado interno**.
 
-*   **Propósito:** Es la única variable que el servicio puede **modificar**. Se usa dentro de los métodos del servicio (`obtenerDocumentos`, `crearUsuario`, etc.) para actualizar el ciclo de vida de la operación (`CARGANDO`, `EXITO`, `ERROR`).
-*   **Visibilidad:** `private readonly`.
+    *   **Propósito:** Es la única variable que el servicio puede **modificar**. Se usa dentro de los métodos del servicio (`obtenerDocumentos`, `crearUsuario`, etc.) para actualizar el ciclo de vida de la operación (`CARGANDO`, `EXITO`, `ERROR`).
+    *   **Visibilidad:** `private readonly`.
     *   `private`: Asegura que ningún componente o servicio externo pueda acceder a él. Es de uso exclusivo de la clase.
     *   `readonly`: Previene que la referencia al `signal` en sí misma sea reasignada.
-*   **Tipo:** `WritableSignal<StateEnum>`. Necesita ser mutable para poder usar `.set()` y `.update()`.
-*   **Nomenclatura:** `_` + `[Nombre del Signal Público]`. El guion bajo `_` es una convención universal para indicar que es una propiedad privada.
+    *   **Tipo:** `WritableSignal<StateEnum>`. Necesita ser mutable para poder usar `.set()` y `.update()`.
+    *   **Nomenclatura:** `_` + `[Nombre del Signal Público]`. El guion bajo `_` es una convención universal para indicar que es una propiedad privada.
     *   **Ejemplo:** `private readonly _stateEnumRead = signal<StateEnum>(StateEnum.INICIAL);`
 
 ### 2. El Signal Público: `stateEnum[NombreDelServicio]`
 
 Este es el `signal` que el servicio expone al mundo exterior para que otros puedan **observar su estado** de forma segura.
 
-*   **Propósito:** Es el "panel de control" que los componentes, directivas y otros servicios consumen para reaccionar a los cambios de estado (por ejemplo, para mostrar un spinner o un mensaje de error).
-*   **Visibilidad:** `public readonly`.
+    *   **Propósito:** Es el "panel de control" que los componentes, directivas y otros servicios consumen para reaccionar a los cambios de estado (por ejemplo, para mostrar un spinner o un mensaje de error).
+    *   **Visibilidad:** `public readonly`.
     *   `public`: Para que cualquier consumidor pueda inyectar el servicio y leer su estado.
-*   **Tipo:** `Signal<StateEnum>`. Se obtiene aplicando `.asReadonly()` al `signal` privado. Esto elimina los métodos `.set()` y `.update()`, haciéndolo **inmutable** desde el exterior.
-*   **Nomenclatura:** `stateEnum` + `[Nombre del Servicio en PascalCase]`. Esta convención es clara, descriptiva y evita colisiones de nombres cuando un componente inyecta múltiples servicios.
+    *   **Tipo:** `Signal<StateEnum>`. Se obtiene aplicando `.asReadonly()` al `signal` privado. Esto elimina los métodos `.set()` y `.update()`, haciéndolo **inmutable** desde el exterior.
+    *   **Nomenclatura:** `stateEnum` + `[Nombre del Servicio en PascalCase]`. Esta convención es clara, descriptiva y evita colisiones de nombres cuando un componente inyecta múltiples servicios.
     *   **Ejemplo:** `public readonly stateEnumRead = this._stateEnumRead.asReadonly();`
 
 ---
