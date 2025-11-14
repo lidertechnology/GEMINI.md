@@ -100,5 +100,18 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
 
   * Servicios de Utilidad (Stateless): Nunca deben usar el StateEnum. Estos servicios son herramientas funcionales cuya ejecución es inmediata y directa.
     El estado de la operación (si una funcionalidad falla o no) es responsabilidad del componente o del Servicio Operacional que invoca a la utilidad.
+    Los servicios de utilidad siempre serán guardados dentro del directorio src/app/tools.
+
+# Servicios de Utilidad de Lidertech:
+
+  Los servicios de Utilidad se guardarán siempre en src/app/tools.
+
+# Servicios Operacionales de Lidertech:
+
+  Los servicios operacionales serán guardaos en directorios según su uso de origen ejemplo:
+  
+  * Los servicios que trabajan con firebase se crearan en el directorio src/app/firebase.
+  * Los Servicios de APIS de Google se guardarán en el directorio src/app/google.
+  * Los Servicios operacionales de APIS de Redes sociales se guardarán en src/app/rrss.
 
   
