@@ -251,6 +251,37 @@ Esta convención es la piedra angular de nuestra arquitectura QI 1000%. Garantiz
 - **Contexto:** Antes de realizar una tarea, revisa los archivos relevantes para entender el contexto completo.
 - **Confirmación:** No pidas confirmación para cada paso. Procede con el plan de acción y solo pregunta si la intención original es ambigua o el cambio es muy grande o destructivo.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Auditorías de Código Automatizadas
 
-Para iniciar una auditoría completa del proyecto basada en las convenciones de este documento, utiliza la frase clave: **'Lider audita mi codigo'**. Al recibir esta instrucción, revisaré los archivos clave del proyecto y reportaré o corregiré cualquier desviación de las reglas aquí establecidas.
+Para interactuar con el sistema de auditorías, utiliza las siguientes frases clave, diseñadas para ser claras y flexibles:
+
+### 1. Auditoría General
+Para ejecutar una revisión completa de todo el proyecto en busca de desviaciones de las convenciones de este documento:
+- **`Lider audita el proyecto`**
+
+### 2. Auditoría por Archivo Específico
+Para auditar un archivo concreto, sin importar si es un componente, servicio u otro tipo de archivo:
+- **`Lider audita [ruta/completa/al/archivo.ts]`**
+- *Ejemplo: `Lider audita src/app/components/search/search.ts`*
+
+### 3. Auditoría Contextual (Archivo Activo)
+Para auditar rápidamente el archivo o conjunto de archivos en los que estás trabajando actualmente:
+- **`Lider audita este archivo`**: Revisa el archivo que tienes abierto en el editor.
+- **`Lider audita este componente`**: Revisa el conjunto de archivos (`.ts`, `.html`, `.css`) del componente activo.
+- **`Lider audita este servicio`**: Revisa el archivo del servicio que tienes abierto.
+
