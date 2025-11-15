@@ -61,6 +61,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
+
 # ESTADOS GLOBALES DE LA APLICACIÓN:
 
   El servicio de estado global se llamará exclusivamente GlobalState. Su alcance es estrictamente limitado a gestionar la Identidad, la Sesión y la Disponibilidad de la aplicación (ej., rolDeUsuario, sesionActiva). 
@@ -120,6 +121,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
+
 # Uso de StateEnum por Tipo de Servicio:
 
   El uso del diccionario de estado StateEnum está estrictamente delimitado por la función del servicio:
@@ -136,6 +138,8 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
   Los servicios de Utilidad se guardarán siempre en src/app/tools.
 
+- **Excepción de Ubicación para Servicios de Dominio:** Los servicios de utilidad que pertenecen a un dominio de negocio específico (como `auth` o `pagos`) deben permanecer en su directorio de dominio correspondiente (ej: `src/app/auth/autorizador.service.ts`). Esto prevalece sobre la regla general de mover todos los servicios de utilidad a `src/app/tools/`, ya que mantiene la cohesión lógica del dominio.
+
 # Servicios Operacionales de Lidertech:
 
   Los servicios operacionales serán guardaos en directorios según su uso de origen ejemplo:
@@ -143,6 +147,32 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
   * Los servicios que trabajan con firebase se crearan en el directorio src/app/firebase.
   * Los Servicios de APIS de Google se guardarán en el directorio src/app/google.
   * Los Servicios operacionales de APIS de Redes sociales se guardarán en src/app/rrss.
+
+---
+
+# SEGURIDAD EN LAS APPS LIDERTECH
+
+Para garantizar una seguridad unificada, predecible y robusta en todas las aplicaciones de Lidertech, el directorio `src/app/auth` contendrá exclusivamente los siguientes tres (3) archivos maestros, que conforman el núcleo de la seguridad de la aplicación.
+
+### 1. `auth.ts` (El Servicio de Autenticación)
+
+*   **Responsabilidad Única:** Gestionar el ciclo de vida de la autenticación del usuario. Es el único servicio que puede comunicarse con un proveedor externo (Firebase Auth, Auth0, etc.) para realizar operaciones como `iniciarSesion()`, `cerrarSesion()` y escuchar los cambios en el estado de autenticación.
+*   **Gestión de Estado:**
+    *   **Estado Operacional:** Debe implementar el **Patrón de Signal de Estado Dual** (`_stateEnumAuth` / `stateEnumAuth`) para gestionar el estado de las operaciones (`CARGANDO`, `EXITO`, `ERROR`).
+    *   **Datos de Usuario:** Debe almacenar la información cruda del usuario autenticado (ej. el objeto `User` de Firebase) y su perfil de la base de datos. Estos datos se expondrán como `signals` de solo lectura.
+*   **Nomenclatura:** `AuthService`
+
+### 2. `autorizador.ts` (El Servicio de Autorización)
+
+*   **Responsabilidad Única:** Determinar los permisos de un usuario autenticado. Su función es traducir el "rol" o los permisos del usuario (obtenidos del `AuthService`) en `signals` booleanos, reactivos y fáciles de consumir.
+*   **Implementación:** Este servicio debe ser **Stateless**. No gestiona su propio `StateEnum`. Depende reactivamente del estado expuesto por `AuthService`. Su lógica se basa en `signals` computados (`computed`).
+*   **Nomenclatura:** `Autorizador` o `AutorizadorService`. Las propiedades que expone deben ser auto-descriptivas, como `esAdmin: Signal<boolean>`, `puedeVerFacturas: Signal<boolean>`.
+
+### 3. `auth-guard.ts` (El Guardián de Rutas)
+
+*   **Responsabilidad Única:** Proteger las rutas de la aplicación. Actúa como el punto de control para el router de Angular, decidiendo si un usuario puede o no acceder a una página específica.
+*   **Implementación:** Debe ser una función `CanActivateFn` (el estándar moderno de Angular). Inyectará el `AutorizadorService` o el `AuthService` para tomar decisiones basadas en los `signals` de estado de sesión o de rol. Si el acceso es denegado, es responsable de redirigir al usuario a una página adecuada (ej. `/login` o `/acceso-denegado`).
+*   **Nomenclatura:** `authGuard`
 
 ---
 
@@ -212,3 +242,15 @@ public readonly stateEnumWrite = this._stateEnumWrite.asReadonly();
 ```
 
 Esta convención es la piedra angular de nuestra arquitectura QI 1000%. Garantiza que el estado de los servicios sea robusto, predecible y a prueba de manipulaciones accidentales.
+
+---
+
+# INTERACCIÓN CON GEMINI (IA ASISTENTE)
+
+- **Proactividad:** Espero que seas proactivo. Si identificas una mejora o un refactor que se alinea con estas guías, siéntete libre de proponerlo o aplicarlo directamente.
+- **Contexto:** Antes de realizar una tarea, revisa los archivos relevantes para entender el contexto completo.
+- **Confirmación:** No pidas confirmación para cada paso. Procede con el plan de acción y solo pregunta si la intención original es ambigua o el cambio es muy grande o destructivo.
+
+## Auditorías de Código Automatizadas
+
+Para iniciar una auditoría completa del proyecto basada en las convenciones de este documento, utiliza la frase clave: **'Lider audita mi codigo'**. Al recibir esta instrucción, revisaré los archivos clave del proyecto y reportaré o corregiré cualquier desviación de las reglas aquí establecidas.
