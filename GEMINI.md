@@ -1,7 +1,7 @@
 # GEMINI.md
 Archivo de convenciones Lidertech para usar dentro del editor firebase studio en proyectos Angular de Lidertech.
 
-# ARQUITECTURA UNCA PARA TODA LA APP ArquiLiderL10:
+# ARQUITECTURA ÚNCA PARA TODA LA APP ArquiLiderL10:
 
   + Todo el proyecto contiene solo 10 directorios principales dentro del src/app.
   + Los directorios principales son:
