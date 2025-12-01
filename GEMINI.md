@@ -1,6 +1,10 @@
 # GEMINI.md
 Archivo de convenciones Lidertech para usar dentro del editor firebase studio en proyectos Angular de Lidertech.
 
+# NORMAS DE UI:
+  * Todas nuestras apps usaran angular material para UI.
+  * Sólo usamos css para estilos pero en el proyecto solo existirá un archivo custom-theme.scss instalado por Angular Material.
+
 # ARQUITECTURA ÚNCA PARA TODA LA APP ArquiLiderL10:
 
   + Todo el proyecto contiene solo 10 directorios principales dentro del src/app.
@@ -9,11 +13,29 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
     * components: componentes reusables tontos y lógica simple.
     * config: directorio donde se guardan servicios de instancias de firebase y otros proveedores, conecciones a la infraestructura.
     * core: alberga directorios de infraestructura como firebase, aws, google, servicios acopladores.
+    * css: manejamos una biblioteca propia estandar en src/app/css/lib. Los estilos personalizados del proyecto estarán en src/app/css/style
+    * data: alberga archivos .json de datos estáticos, const de datos estaticos de la app.
     * global: directorio que almacena servicio de estados globales de la app (globalStates.ts) y enum de estados.
     * interfaces: todas las interfaces existente en el proyectos (modelos de datos).
     * tools: servicios, enums y const de utilidad que se requieren en cualquier componente.
     * views: guardará componentes con UI, es el unico liugar admitido para eso.
    + Recomendamos reviasar el glosario Lidertech.
+
+   + El directorio assets siempre reside en src/.
+   + El directio environments se creará con el comando:
+
+         ng generate environments
+
+  + El menú de navegación siempre será creado con angular material: para garantizar su ubicación en el directio views.
+
+         ng generate @angular/material:navigation views/navigation
+
+  + El directorio views siempre se dividira en internamente en 2 directorios:
+      * admin: (para vistas de administradores).
+      * ui: para vistas de usuarios externo no administradores o clientes de la empresa)
+  + 
+
+
 
 +++++++++++++++++++++++++++++++++++
 # MANEJO DE ESTADOS MUTABILIDAD UNICA Y SEGREGACIÓN DE LA MUTABILIDAD DE ESTADOS.
