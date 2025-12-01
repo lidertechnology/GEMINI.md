@@ -1,6 +1,21 @@
 # GEMINI.md
 Archivo de convenciones Lidertech para usar dentro del editor firebase studio en proyectos Angular de Lidertech.
 
+# ARQUITECTURA UNCA PARA TODA LA APP ArquiLiderL10:
+
+  + Todo el proyecto contiene solo 10 directorios principales dentro del src/app.
+  + Los directorios principales son:
+    * auth: directorio donde residen toda la seguridad de la app, authts, autorizador.ts, enums de roles.
+    * components: componentes reusables tontos y lógica simple.
+    * config: directorio donde se guardan servicios de instancias de firebase y otros proveedores, conecciones a la infraestructura.
+    * core: alberga directorios de infraestructura como firebase, aws, google, servicios acopladores.
+    * global: directorio que almacena servicio de estados globales de la app (globalStates.ts) y enum de estados.
+    * interfaces: todas las interfaces existente en el proyectos (modelos de datos).
+    * tools: servicios, enums y const de utilidad que se requieren en cualquier componente.
+    * views: guardará componentes con UI, es el unico liugar admitido para eso.
+   + Recomendamos reviasar el glosario Lidertech.
+
++++++++++++++++++++++++++++++++++++
 # MANEJO DE ESTADOS MUTABILIDAD UNICA Y SEGREGACIÓN DE LA MUTABILIDAD DE ESTADOS.
 
 
@@ -20,6 +35,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
   Esto garantiza que una acción en un componente no cause efectos secundarios inesperados o colisiones de estado en otra parte de la aplicación.
 
 
++++++++++++++++++++++++++++++++++++
 # ENUM DE ESTADOS PARA SERVICIOS Y COMPONENTES:
 
 
@@ -64,7 +80,8 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 # ESTADOS GLOBALES DE LA APLICACIÓN:
 
-  El servicio de estado global se llamará exclusivamente GlobalState. Su alcance es estrictamente limitado a gestionar la Identidad, la Sesión y la Disponibilidad de la aplicación (ej., rolDeUsuario, sesionActiva). 
+  El servicio de estado global se llamará exclusivamente GlobalState. 
+  Su alcance es estrictamente limitado a gestionar la Identidad, la Sesión y la Disponibilidad de la aplicación (ej., rolDeUsuario, sesionActiva). 
   Se prohíbe que este servicio almacene o gestione estados operacionales genéricos (como CARGANDO, PAGINANDO, PROCESANDO), los cuales deben ser manejados por los servicios o componentes locales correspondientes. 
   
   Para garantizar la inmutabilidad (QI 1000%), el estado interno se almacena en WritableSignal privados y se expone públicamente solo a través de propiedades de Signal<T> de solo lectura. 
@@ -92,7 +109,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
       }
 
 
-
++++++++++++++++++++++++++++++++++++
 # ESTADOS EN COMPONENTES:
 
   Crearemos siempre la variable signal que contiene el estado local del componente, 
@@ -109,7 +126,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
-
++++++++++++++++++++++++++++++++++++
 # SERVICIOS DE APLICACIONES LIDERTECH Y tipos Y USOS:
 
   En la arquitectura Lidertech, los servicios se dividen en dos categorías basadas en su gestión de estado, para asegurar el Principio de Responsabilidad Única:
@@ -121,8 +138,8 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
-
-# Uso de StateEnum por Tipo de Servicio:
++++++++++++++++++++++++++++++++++++
+# Uso de StateEnum unico en la app:
 
   El uso del diccionario de estado StateEnum está estrictamente delimitado por la función del servicio:
 
@@ -134,12 +151,15 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
++++++++++++++++++++++++++++++++++++
 # Servicios de Utilidad de Lidertech:
 
   Los servicios de Utilidad se guardarán siempre en src/app/tools.
 
 - **Excepción de Ubicación para Servicios de Dominio:** Los servicios de utilidad que pertenecen a un dominio de negocio específico (como `auth` o `pagos`) deben permanecer en su directorio de dominio correspondiente (ej: `src/app/auth/autorizador.service.ts`). Esto prevalece sobre la regla general de mover todos los servicios de utilidad a `src/app/tools/`, ya que mantiene la cohesión lógica del dominio.
 
+
++++++++++++++++++++++++++++++++++++
 # Servicios Operacionales de Lidertech:
 
   Los servicios operacionales serán guardaos en directorios según su uso de origen ejemplo:
@@ -148,8 +168,8 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
   * Los Servicios de APIS de Google se guardarán en el directorio src/app/google.
   * Los Servicios operacionales de APIS de Redes sociales se guardarán en src/app/rrss.
 
----
 
++++++++++++++++++++++++++++++++++++
 # SEGURIDAD EN LAS APPS LIDERTECH
 
 Para garantizar una seguridad unificada, predecible y robusta en todas las aplicaciones de Lidertech, el directorio `src/app/auth` contendrá exclusivamente los siguientes tres (3) archivos maestros, que conforman el núcleo de la seguridad de la aplicación.
@@ -176,6 +196,8 @@ Para garantizar una seguridad unificada, predecible y robusta en todas las aplic
 
 ---
 
+
++++++++++++++++++++++++++++++++++++
 # Convención Universal: El Patrón de Signal de Estado Dual
 
 Para garantizar la seguridad, inmutabilidad y claridad en la gestión del estado de los **Servicios Operacionales** (aquellos que realizan tareas asíncronas como leer o escribir datos), implementaremos obligatoriamente el **Patrón de Signal de Estado Dual**.
@@ -187,6 +209,8 @@ Este patrón se basa en la separación de responsabilidades de escritura y lectu
 
 ---
 
+
++++++++++++++++++++++++++++++++++++
 ### 1. El Signal Privado: `_stateEnum[NombreDelServicio]`
 
 Este es el `signal` que el servicio utiliza para gestionar **su propio estado interno**.
@@ -211,6 +235,7 @@ Este es el `signal` que el servicio expone al mundo exterior para que otros pued
     *   **Ejemplo:** `public readonly stateEnumRead = this._stateEnumRead.asReadonly();`
 
 ---
+
 
 ### Ejemplos de Aplicación Universal:
 
@@ -245,6 +270,8 @@ Esta convención es la piedra angular de nuestra arquitectura QI 1000%. Garantiz
 
 ---
 
+
++++++++++++++++++++++++++++++++++++
 # INTERACCIÓN CON GEMINI (IA ASISTENTE)
 
 - **Proactividad:** Espero que seas proactivo. Si identificas una mejora o un refactor que se alinea con estas guías, siéntete libre de proponerlo o aplicarlo directamente.
