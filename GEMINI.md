@@ -389,6 +389,13 @@ Para auditar rápidamente el archivo o conjunto de archivos en los que estás tr
   - **`lider audita este archivo`**: Revisa el archivo que tienes abierto en el editor.
   - **`lider audita este componente`**: Revisa el conjunto de archivos (`.ts`, `.html`, `.css`) del componente activo.
   - **`lider audita este servicio`**: Revisa el archivo del servicio que tienes abierto.
+  - 
+### 4\. Comportamiento del Agente durante la Auditoría
+
+El agente actuará de forma autónoma o consultiva según la gravedad de la desviación:
+
+* **Corrección Automática (Formato y Estilo):** El agente aplicará automáticamente y sin pedir confirmación todas las correcciones relacionadas con las "6 Reglas de Formato .ts", "Normas HTML" y "Nomenclatura". Entregará el código refactorizado directamente.
+* **Consulta Crítica (Arquitectura y Lógica):** Si el agente detecta violaciones a la "Regla de Oro de Mutabilidad", "Ubicación de Archivos" o "Lógica de Negocio", detendrá la ejecución, presentará un reporte del error y propondrá una solución técnica para que el Líder autorice la refactorización.
 
 <!-- end list -->
 
