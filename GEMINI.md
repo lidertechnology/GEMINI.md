@@ -38,7 +38,7 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
 
 
 +++++++++++++++++++++++++++++++++++
-👑 Convención Definitiva de Formato Lidertech de codigo .ts (6 Reglas)
+# FORMATO DE CODIGO LIDERTECH PARA FICHREOS .ts (6 Reglas)
  
 #	Regla	Descripción
 1	Alineación Vertical de Asignación	En todas las declaraciones de propiedades, servicios inyectados y constantes consecutivas, el código debe usar indentación de columna para alinear verticalmente el signo de asignación (=).
