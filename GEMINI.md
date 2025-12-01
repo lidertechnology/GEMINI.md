@@ -304,7 +304,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 Para garantizar una seguridad unificada, predecible y robusta en todas las aplicaciones de Lidertech, el directorio `src/app/auth` contendrá exclusivamente los siguientes tres (3) archivos maestros, que conforman el núcleo de la seguridad de la aplicación.
 
-### 1. `auth.ts` (El Servicio de Autenticación)
+### A. `auth.ts` (El Servicio de Autenticación)
 
 *   **Responsabilidad Única:** Gestionar el ciclo de vida de la autenticación del usuario. Es el único servicio que puede comunicarse con un proveedor externo (Firebase Auth, Auth0, etc.) para realizar operaciones como `iniciarSesion()`, `cerrarSesion()` y escuchar los cambios en el estado de autenticación.
 *   **Gestión de Estado:**
@@ -313,22 +313,26 @@ Para garantizar una seguridad unificada, predecible y robusta en todas las aplic
 *   **Nomenclatura:** `AuthService`
 
 
-### 2. `autorizador.ts` (El Servicio de Autorización)
+### B. `autorizador.ts` (El Servicio de Autorización)
 
 *   **Responsabilidad Única:** Determinar los permisos de un usuario autenticado. Su función es traducir el "rol" o los permisos del usuario (obtenidos del `AuthService`) en `signals` booleanos, reactivos y fáciles de consumir.
 *   **Implementación:** Este servicio debe ser **Stateless**. No gestiona su propio `StateEnum`. Depende reactivamente del estado expuesto por `AuthService`. Su lógica se basa en `signals` computados (`computed`).
 *   **Nomenclatura:** `Autorizador` o `AutorizadorService`. Las propiedades que expone deben ser auto-descriptivas, como `esAdmin: Signal<boolean>`, `puedeVerFacturas: Signal<boolean>`.
 
-### 3. `auth-guard.ts` (El Guardián de Rutas)
+### C. `auth-guard.ts` (El Guardián de Rutas)
 
 *   **Responsabilidad Única:** Proteger las rutas de la aplicación. Actúa como el punto de control para el router de Angular, decidiendo si un usuario puede o no acceder a una página específica.
 *   **Implementación:** Debe ser una función `CanActivateFn` (el estándar moderno de Angular). Inyectará el `AutorizadorService` o el `AuthService` para tomar decisiones basadas en los `signals` de estado de sesión o de rol. Si el acceso es denegado, es responsable de redirigir al usuario a una página adecuada (ej. `/login` o `/acceso-denegado`).
 *   **Nomenclatura:** `authGuard`
 
 
-### 4. `perfil-interface.ts` (El Guardián de Rutas)
 
 ---
+
+
+
+
+
 
 
 +++++++++++++++++++++++++++++++++++
