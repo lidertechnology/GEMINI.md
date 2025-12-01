@@ -38,7 +38,7 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
 
 
 +++++++++++++++++++++++++++++++++++
-👑 Convención Definitiva de Formato Lidertech (6 Reglas)
+👑 Convención Definitiva de Formato Lidertech de codigo .ts (6 Reglas)
  
 #	Regla	Descripción
 1	Alineación Vertical de Asignación	En todas las declaraciones de propiedades, servicios inyectados y constantes consecutivas, el código debe usar indentación de columna para alinear verticalmente el signo de asignación (=).
@@ -111,6 +111,20 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
     //********** FIN DEL COMPONENTE **********//
 
 
+
+
+
+
++++++++++++++++++++++++++++++++++++
+📐 Convención Definitiva de Formato HTML Lidertech
+
+
+Regla	Descripción	Ejemplo de Aplicación
+1. Indentación Estándar	Utilizar una indentación estándar (dos o cuatro espacios, se recomienda dos) en toda la jerarquía de etiquetas.	<main> usa 0 espacios, <mat-card> usa 2, <header> usa 4, etc.
+2. Atributos en una Sola Línea	Mantener la declaración de la etiqueta y todos sus atributos en la misma línea. Evitar la división de atributos en múltiples líneas (a menos que sean excesivamente largos).	<button mat-raised-button color="primary" type="submit" [disabled]="estado() === EstadoEnum.CARGANDO">
+3. Líneas Vacías para Separación de Bloques	Utilizar una línea vacía para separar bloques lógicos importantes (e.g., entre </header> y <mat-card-content>, o entre un bloque @if y la siguiente etiqueta).	Se usan dos saltos de línea (\n\n) después del cierre de un bloque principal (</header>).
+4. Separación de Directivas de Control	Los bloques de control de flujo (@if, @for, @switch) se separan del contenido circundante con una línea vacía.	Línea vacía antes y después del bloque @if (...) { ... }.
+5. Cierre de Etiquetas Contenedoras	Las etiquetas contenedoras principales (<mat-card>, <form>) deben tener su etiqueta de cierre (</mat-card>) separada por una línea vacía del contenido que la precede.
 
 
 
