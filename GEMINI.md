@@ -150,6 +150,9 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
   Esto garantiza que una acción en un componente no cause efectos secundarios inesperados o colisiones de estado en otra parte de la aplicación.
 
 
+
+
+
 +++++++++++++++++++++++++++++++++++
 # ENUM DE ESTADOS PARA SERVICIOS Y COMPONENTES:
 
@@ -157,7 +160,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
   El diccionario de estados universal para todas las divisiones de Lidertech se llamará estrictamente StateEnum (singular, sin 's').
   Alcance: Este enum es inmutable y debe ser la única fuente de vocabulario para describir el estado operacional, de conectividad y de flujo de cualquier componente o servicio en todas las aplicaciones de Lidertech durante los próximos 30 años.
   Convención de Nombres: Las claves dentro del enum deben estar en MAYÚSCULAS y sus valores asociados en minúsculas (ej. CARGANDO = 'cargando').
-  Ubicación: El archivo debe residir en un directorio central de utilidades, llamado preferiblemente states/state.enum.ts o similar.
+  Ubicación: El fichero enum de estados solo debe residir en el directorio "global" de la siguiente manera src/app/global.
 
   Contenido del Enum de estados único y universal.
 
