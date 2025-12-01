@@ -30,10 +30,89 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
 
          ng generate @angular/material:navigation views/navigation
 
-  + El directorio views siempre se dividira en internamente en 2 directorios:
+  + El directorio "views" siempre se dividira en internamente en 3 directorios:
       * admin: (para vistas de administradores).
-      * ui: para vistas de usuarios externo no administradores o clientes de la empresa)
+      * pages: para vistas de usuarios externo no administradores o clientes de la empresa).
+      * navigation: componente de navegacion de Angular Material.
   + 
+
+
++++++++++++++++++++++++++++++++++++
+🏗️ Convención de Optimización y Formato Robusto de código Lidertech:
+ Esta convención combina la legibilidad por alineación con la simplicidad funcional en los métodos, maximizando la claridad y el mantenimiento del código.
+ 
+ *1. Alineación Vertical de Asignación (Indetación de Columna)
+Aplicación: En todas las declaraciones consecutivas de propiedades de clase, servicios inyectados (inject()) y constantes, el signo de asignación (=) debe ser alineado verticalmente usando espacios adicionales.
+
+  *Propósito: Mejorar la capacidad de escaneo y lectura del bloque de declaraciones.
+
+ *2. Encapsulación Rigurosa de Datos Internos del Método
+Aplicación: Cualquier dato fijo, mensaje, ruta, tiempo de duración o parámetro de configuración que se use dentro de un método debe ser extraído y encapsulado como una propiedad de clase (public readonly o private readonly).
+
+ *Propósito: Asegurar que el cuerpo del método se centre únicamente en la lógica de control de flujo (la secuencia de eventos), mientras que los valores estáticos residen en la parte de configuración de la clase.
+
+ *3. Formato async/await y try/catch Compacto
+Aplicación: Los bloques try y catch deben abrirse en la misma línea que la declaración (try { y catch (error) {).
+
+*4. Comentario de Cierre con Separación Visual
+Aplicación: Al finalizar la llave de cierre de la clase (}) de un componente o servicio, se deben incluir cinco líneas vacías para crear un espacio visual claro.
+
+Comentario: Después de las cinco líneas de separación, se añade el comentario de cierre distintivo (ej. //********** FIN DEL COMPONENTE **********//).
+
+Propósito: Máxima optimización visual del archivo y fácil identificación del final de la clase principal.
+
+Concisión: El cuerpo interno del bloque debe escribirse en la menor cantidad de líneas posible (idealmente una sola línea por bloque si las sentencias son cortas), logrando un flujo de control visualmente compacto y conciso.
+
+###Ejemplo de Bloque Aplicado:
+
+     export class LoginComponent {
+
+    // 1. Alineación Vertical de Asignación
+    public readonly estado      = signal<StateEnum>(StateEnum.INICIAL);
+    public readonly EstadoEnum  = StateEnum; 
+  
+    private readonly authService     = inject(AuthService);
+    private readonly snackBarService = inject(SnackBarService);
+    private readonly router          = inject(Router);
+  
+    // 2. Encapsulación Rigurosa de Datos Internos
+    private readonly MENSAJE_EXITO   = '¡Inicio de sesión exitoso!';
+    private readonly MENSAJE_ERROR   = 'Error al iniciar sesión.';
+    private readonly DURACION_EXITO  = 3000;
+    private readonly DURACION_ERROR  = 5000;
+    private readonly RUTA_DESTINO    = ['/procesos'];
+  
+    // Nuevas Constantes de CONFIGURACIÓN VISUAL para el Template
+    public readonly LOGO_URL         = 'https://lidertech.com/assets/logo.png';
+    public readonly ALT_LOGO         = 'Lidertech Logo';
+    public readonly TITULO_PAGINA    = 'Iniciar sesión';
+    public readonly TEXTO_BOTON      = 'Iniciar sesión con Google';
+    public readonly SVG_ICONO_GOOGLE = 'google';
+    public readonly SPINNER_DIAMETRO = 24;
+  
+  
+    async iniciarSesion(): Promise<void> {
+      this.estado.set(StateEnum.CARGANDO);
+      // 3. Formato try/catch Compacto
+      try { 
+        await this.authService.iniciarSesionConGoogle(); 
+        this.estado.set(StateEnum.EXITO);
+        this.snackBarService.mostrarMensaje(this.MENSAJE_EXITO, 'exito', { duracion: this.DURACION_EXITO });
+        this.router.navigate(this.RUTA_DESTINO); 
+      } catch (error) { 
+        this.estado.set(StateEnum.ERROR);
+        this.snackBarService.mostrarMensaje(this.MENSAJE_ERROR, 'error', { duracion: this.DURACION_ERROR });
+      }
+    }
+    }
+  
+  
+  
+  
+  
+    //********** FIN DEL COMPONENTE **********//
+
+
 
 
 
@@ -204,6 +283,7 @@ Para garantizar una seguridad unificada, predecible y robusta en todas las aplic
     *   **Datos de Usuario:** Debe almacenar la información cruda del usuario autenticado (ej. el objeto `User` de Firebase) y su perfil de la base de datos. Estos datos se expondrán como `signals` de solo lectura.
 *   **Nomenclatura:** `AuthService`
 
+
 ### 2. `autorizador.ts` (El Servicio de Autorización)
 
 *   **Responsabilidad Única:** Determinar los permisos de un usuario autenticado. Su función es traducir el "rol" o los permisos del usuario (obtenidos del `AuthService`) en `signals` booleanos, reactivos y fáciles de consumir.
@@ -215,6 +295,9 @@ Para garantizar una seguridad unificada, predecible y robusta en todas las aplic
 *   **Responsabilidad Única:** Proteger las rutas de la aplicación. Actúa como el punto de control para el router de Angular, decidiendo si un usuario puede o no acceder a una página específica.
 *   **Implementación:** Debe ser una función `CanActivateFn` (el estándar moderno de Angular). Inyectará el `AutorizadorService` o el `AuthService` para tomar decisiones basadas en los `signals` de estado de sesión o de rol. Si el acceso es denegado, es responsable de redirigir al usuario a una página adecuada (ej. `/login` o `/acceso-denegado`).
 *   **Nomenclatura:** `authGuard`
+
+
+### 4. `perfil-interface.ts` (El Guardián de Rutas)
 
 ---
 
@@ -293,6 +376,11 @@ Esta convención es la piedra angular de nuestra arquitectura QI 1000%. Garantiz
 ---
 
 
+
+
+
+
+
 +++++++++++++++++++++++++++++++++++
 # INTERACCIÓN CON GEMINI (IA ASISTENTE)
 
@@ -315,22 +403,22 @@ Esta convención es la piedra angular de nuestra arquitectura QI 1000%. Garantiz
 
 
 
-## Auditorías de Código Automatizadas
+# AUDITORIAS DE CÓDIGO AUTOMATIZADAS
 
 Para interactuar con el sistema de auditorías, utiliza las siguientes frases clave, diseñadas para ser claras y flexibles:
 
 ### 1. Auditoría General
 Para ejecutar una revisión completa de todo el proyecto en busca de desviaciones de las convenciones de este documento:
-- **`Lider audita el proyecto`**
+- ***`Lider audita el proyecto`***
 
 ### 2. Auditoría por Archivo Específico
 Para auditar un archivo concreto, sin importar si es un componente, servicio u otro tipo de archivo:
-- **`Lider audita [ruta/completa/al/archivo.ts]`**
-- *Ejemplo: `Lider audita src/app/components/search/search.ts`*
+- **`lider audita mis archivos abiertos`**
+- La auditoria tomará en cuenta los archivos que se encuentren abiertos en ese momento.
 
 ### 3. Auditoría Contextual (Archivo Activo)
 Para auditar rápidamente el archivo o conjunto de archivos en los que estás trabajando actualmente:
-- **`Lider audita este archivo`**: Revisa el archivo que tienes abierto en el editor.
-- **`Lider audita este componente`**: Revisa el conjunto de archivos (`.ts`, `.html`, `.css`) del componente activo.
-- **`Lider audita este servicio`**: Revisa el archivo del servicio que tienes abierto.
+- **`lider audita este archivo`**: Revisa el archivo que tienes abierto en el editor.
+- **`lider audita este componente`**: Revisa el conjunto de archivos (`.ts`, `.html`, `.css`) del componente activo.
+- **`lider audita este servicio`**: Revisa el archivo del servicio que tienes abierto.
 
