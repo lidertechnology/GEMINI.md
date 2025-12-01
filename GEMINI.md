@@ -38,51 +38,40 @@ Archivo de convenciones Lidertech para usar dentro del editor firebase studio en
 
 
 +++++++++++++++++++++++++++++++++++
-🏗️ Convención de Optimización y Formato Robusto de código Lidertech:
- Esta convención combina la legibilidad por alineación con la simplicidad funcional en los métodos, maximizando la claridad y el mantenimiento del código.
+👑 Convención Definitiva de Formato Lidertech (6 Reglas)
  
- *1. Alineación Vertical de Asignación (Indetación de Columna)
-Aplicación: En todas las declaraciones consecutivas de propiedades de clase, servicios inyectados (inject()) y constantes, el signo de asignación (=) debe ser alineado verticalmente usando espacios adicionales.
-
-  *Propósito: Mejorar la capacidad de escaneo y lectura del bloque de declaraciones.
-
- *2. Encapsulación Rigurosa de Datos Internos del Método
-Aplicación: Cualquier dato fijo, mensaje, ruta, tiempo de duración o parámetro de configuración que se use dentro de un método debe ser extraído y encapsulado como una propiedad de clase (public readonly o private readonly).
-
- *Propósito: Asegurar que el cuerpo del método se centre únicamente en la lógica de control de flujo (la secuencia de eventos), mientras que los valores estáticos residen en la parte de configuración de la clase.
-
- *3. Formato async/await y try/catch Compacto
-Aplicación: Los bloques try y catch deben abrirse en la misma línea que la declaración (try { y catch (error) {).
-
-*4. Comentario de Cierre con Separación Visual
-Aplicación: Al finalizar la llave de cierre de la clase (}) de un componente o servicio, se deben incluir cinco líneas vacías para crear un espacio visual claro.
-
-Comentario: Después de las cinco líneas de separación, se añade el comentario de cierre distintivo (ej. //********** FIN DEL COMPONENTE **********//).
-
-Propósito: Máxima optimización visual del archivo y fácil identificación del final de la clase principal.
-
-Concisión: El cuerpo interno del bloque debe escribirse en la menor cantidad de líneas posible (idealmente una sola línea por bloque si las sentencias son cortas), logrando un flujo de control visualmente compacto y conciso.
+#	Regla	Descripción
+1	Alineación Vertical de Asignación	En todas las declaraciones de propiedades, servicios inyectados y constantes consecutivas, el código debe usar indentación de columna para alinear verticalmente el signo de asignación (=).
+2	Encapsulación Rigurosa de Datos	Todos los datos fijos, mensajes, rutas o parámetros utilizados dentro de un método deben ser extraídos y encapsulados como propiedades de clase (public readonly o private readonly).
+3	Formato try/catch Compacto	Los bloques try y catch deben abrirse en la misma línea que la declaración (try { y catch (error) {).
+4	Comentario de Cierre con Separación	Al finalizar la llave de cierre de la clase (}), se incluyen cinco líneas vacías y luego el comentario de cierre distintivo (ej. //********** FIN DEL COMPONENTE **********//).
+5	Separación Visual por Acción	Dentro de los métodos, cada sentencia de acción principal (ej. await, this.estado.set(), this.servicio.metodo()) debe comenzar en su propia línea para visualizar el flujo de ejecución.
+6	Estilo Estético con Emojis	Utilizar emojis contextualmente relevantes en los comentarios de bloque para mejorar la escaneabilidad visual: // 📝 ESTADO LOCAL, // ⚙️ INYECCIONES, // 🚀 MÉTODOS, etc.
 
 ###Ejemplo de Bloque Aplicado:
 
-     export class LoginComponent {
-
+     
+     // 📝 ESTADO LOCAL (Regla 6)
     // 1. Alineación Vertical de Asignación
     public readonly estado      = signal<StateEnum>(StateEnum.INICIAL);
     public readonly EstadoEnum  = StateEnum; 
   
+    // ⚙️ INYECCIONES DE SERVICIOS (Regla 6)
+    // 1. Alineación Vertical de Asignación
     private readonly authService     = inject(AuthService);
     private readonly snackBarService = inject(SnackBarService);
     private readonly router          = inject(Router);
   
-    // 2. Encapsulación Rigurosa de Datos Internos
+    // 📝 CONSTANTES DE LÓGICA (Regla 6 y 2)
+    // 1. Alineación Vertical de Asignación
     private readonly MENSAJE_EXITO   = '¡Inicio de sesión exitoso!';
     private readonly MENSAJE_ERROR   = 'Error al iniciar sesión.';
     private readonly DURACION_EXITO  = 3000;
     private readonly DURACION_ERROR  = 5000;
     private readonly RUTA_DESTINO    = ['/procesos'];
   
-    // Nuevas Constantes de CONFIGURACIÓN VISUAL para el Template
+    // 🎨 CONSTANTES DE UI (Regla 6 y 2)
+    // 1. Alineación Vertical de Asignación
     public readonly LOGO_URL         = 'https://lidertech.com/assets/logo.png';
     public readonly ALT_LOGO         = 'Lidertech Logo';
     public readonly TITULO_PAGINA    = 'Iniciar sesión';
@@ -91,26 +80,37 @@ Concisión: El cuerpo interno del bloque debe escribirse en la menor cantidad de
     public readonly SPINNER_DIAMETRO = 24;
   
   
+    // 🚀 MÉTODO DE ACCIÓN (Regla 6)
     async iniciarSesion(): Promise<void> {
       this.estado.set(StateEnum.CARGANDO);
+    
       // 3. Formato try/catch Compacto
       try { 
+        // 5. Separación Visual por Acción
         await this.authService.iniciarSesionConGoogle(); 
+        
         this.estado.set(StateEnum.EXITO);
         this.snackBarService.mostrarMensaje(this.MENSAJE_EXITO, 'exito', { duracion: this.DURACION_EXITO });
         this.router.navigate(this.RUTA_DESTINO); 
+        
       } catch (error) { 
+        // 5. Separación Visual por Acción
         this.estado.set(StateEnum.ERROR);
         this.snackBarService.mostrarMensaje(this.MENSAJE_ERROR, 'error', { duracion: this.DURACION_ERROR });
       }
+      }
     }
-    }
-  
-  
-  
-  
-  
+    
+    // 4. Comentario de Cierre con Separación Visual (5 líneas)
+    
+    
+    
+    
+    
+    
     //********** FIN DEL COMPONENTE **********//
+
+
 
 
 
