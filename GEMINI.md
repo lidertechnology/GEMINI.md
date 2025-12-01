@@ -241,6 +241,7 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
+
 +++++++++++++++++++++++++++++++++++
 # SERVICIOS DE APLICACIONES LIDERTECH Y tipos Y USOS:
 
@@ -253,8 +254,10 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
+
+
 +++++++++++++++++++++++++++++++++++
-# Uso de StateEnum unico en la app:
+# ESTADOS UNICOS EN ENUM DE ESTADOS PARA TODA LA APP:
 
   El uso del diccionario de estado StateEnum está estrictamente delimitado por la función del servicio:
 
@@ -266,22 +269,31 @@ Ningún componente, ni ningún otro servicio, puede mutar el estado de un servic
 
 
 
+
+
 +++++++++++++++++++++++++++++++++++
-# Servicios de Utilidad de Lidertech:
+# SERVICIO DE UTILIDAD GENERICA:
 
   Los servicios de Utilidad se guardarán siempre en src/app/tools.
 
 - **Excepción de Ubicación para Servicios de Dominio:** Los servicios de utilidad que pertenecen a un dominio de negocio específico (como `auth` o `pagos`) deben permanecer en su directorio de dominio correspondiente (ej: `src/app/auth/autorizador.service.ts`). Esto prevalece sobre la regla general de mover todos los servicios de utilidad a `src/app/tools/`, ya que mantiene la cohesión lógica del dominio.
 
 
+
+
+
 +++++++++++++++++++++++++++++++++++
-# Servicios Operacionales de Lidertech:
+# SERVICIOS OPERACIONALES DE INFRAESTRUCTURA LIDERTECH
 
   Los servicios operacionales serán guardaos en directorios según su uso de origen ejemplo:
   
-  * Los servicios que trabajan con firebase se crearan en el directorio src/app/firebase.
-  * Los Servicios de APIS de Google se guardarán en el directorio src/app/google.
-  * Los Servicios operacionales de APIS de Redes sociales se guardarán en src/app/rrss.
+  * Los servicios que trabajan con firebase se crearan en el directorio src/app/core/firebase. Ejemplo si usamos aws quedaria asi: src/app/core/aws
+  * Los Servicios de APIS de Google se guardarán en el directorio src/app/core/google.
+  * Los Servicios operacionales de APIS de Redes sociales se guardarán en src/app/core/rrss.
+
+
+
+
 
 
 +++++++++++++++++++++++++++++++++++
@@ -317,7 +329,7 @@ Para garantizar una seguridad unificada, predecible y robusta en todas las aplic
 
 
 +++++++++++++++++++++++++++++++++++
-# Convención Universal: El Patrón de Signal de Estado Dual
+# CONVENCION UNIVERSAL: El Patrón de Signal de Estado Dual
 
 Para garantizar la seguridad, inmutabilidad y claridad en la gestión del estado de los **Servicios Operacionales** (aquellos que realizan tareas asíncronas como leer o escribir datos), implementaremos obligatoriamente el **Patrón de Signal de Estado Dual**.
 
@@ -327,6 +339,9 @@ Este patrón se basa en la separación de responsabilidades de escritura y lectu
 2.  **El Signal Público (El "Panel de Control")**
 
 ---
+
+
+
 
 
 +++++++++++++++++++++++++++++++++++
